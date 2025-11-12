@@ -8,16 +8,13 @@ import EditIdea from './views/EditIdea'
 import Signup from './views/Signup'
 import Login from './views/Login'
 import ReadIdea from './views/ReadIdea'
-
-
-
-
-
+import App from './App'
 
 createRoot(document.getElementById('root')).render(
  <BrowserRouter>
  <Routes>
-    <Route path="/" element={<AllIdea/>}/>
+  <Route path="/" element={<App/>}/>
+    <Route path="/idea" element={<AllIdea/>}/>
     <Route path="/new" element={<NewIdea/>}/>
     <Route path="/edit/:id" element={<EditIdea/>}/>
     <Route path="/idea/:slug" element={<ReadIdea/>}/>

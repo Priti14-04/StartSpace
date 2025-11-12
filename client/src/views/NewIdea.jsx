@@ -1,76 +1,76 @@
-import { useState } from 'react'
-import MarkdownEditor from '@uiw/react-markdown-editor';
-import { IDEA_CATEGORIES } from '../constants';
-import { useEffect } from 'react';
-import axios from "axios"
-import { getCurrentUser } from '../util';
-import toast ,{Toaster} from "react-hot-toast";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
+const NewIdea = () => {
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [content, setContent] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-function NewIdea() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setMessage("Please login first!");
+        return;
+      }
 
-   const[content,setContent] = useState("");
-   const [title,setTitle] = useState("");
-   const[category,setCategory]=useState(IDEA_CATEGORIES[0]);
-   const[user,setUser] = useState(null);
+      const res = await axios.post(
+        "http://localhost:8080/idea",
+        { title, category, content },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    useEffect(() =>{
-      document.documentElement.setAttribute("data-color-mode" , "light");
-      setUser(getCurrentUser())
-    },[]);
-
-    const saveIdea = async()=>{
-     const response = await axios.post(`${import.meta.env.VITE_API_URL}/idea`,{
-        title,
-        content,
-        category,
-        author:user?._id
-      });
-
-      if(response?.data?.success){
-        toast.success("Idea Saved Successfully");
-        setTimeout(()=>{
-          window.location.href="/";
-        },2000);
-        
-      };
-
-    };
+      if (res.data.success) {
+        setMessage("Idea submitted successfully!");
+        setTimeout(() => navigate("/idea"), 1500); // redirect after 1.5s
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("Error submitting idea");
+    }
+  };
 
   return (
-    <div className='container mx-auto p-4'>
-      <h1>New Idea</h1>
-
-      <input
-       type="text"  
-       placeholder='Idea Title'
-        className='border p-3 w-full my-4'
-        value={title}
-        onChange={(e)=> setTitle(e.target.value)}
+    <div className="p-8 max-w-xl mx-auto">
+      <h2 className="text-3xl font-semibold mb-4">Submit New Idea</h2>
+      {message && <p className="mb-4 text-green-600">{message}</p>}
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="border p-2 rounded"
+          required
         />
-        <select value ={category} onChange={(e) => setCategory(e.target.value)} className='border p-2 my-4'> 
-          {IDEA_CATEGORIES.map((cate)=>{
-            return(
-              <option key={cate}  value={cate}>
-                {cate}
-              </option>
-            );
-          })}
-        </select>
-
-      <MarkdownEditor
-      value={content}
-      height='500px'
-      onChange={(value) => {
-        setContent(value);
-      }}
-    />
-  <button className='bg-blue-500 text-white px-4 py-2 mt-4 rounded cursor-pointer' type="button"
-  onClick={saveIdea}>Save Idea </button>
-
-  <Toaster/>
+        <input
+          type="text"
+          placeholder="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="border p-2 rounded"
+          required
+        />
+        <textarea
+          placeholder="Content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          className="border p-2 rounded"
+          required
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
+        >
+          Submit Idea
+        </button>
+      </form>
     </div>
-  )
-}
+  );
+};
 
-export default NewIdea
+export default NewIdea;

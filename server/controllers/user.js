@@ -1,102 +1,55 @@
 import User from "../models/User.js";
-import md5 from "md5"
+import md5 from "md5";
 import jwt from "jsonwebtoken";
 
-const postSignup = async (req,res) => {
+const postSignup = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
 
-    const {name, email,password} = req.body;
-
-    if(!name || !email || !password){
-        return res.status(400).json({
-            success:false,
-            message:"name,email and password are required",
-        })
+    if (!name || !email || !password) {
+      return res.status(400).json({ success: false, message: "Name, email, and password are required" });
     }
 
-    const nameValidationRegex =/^[A-Za-z]+(?: [A-Za-z]+)*$/;
-    const emailValidationRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    
-     const passwordValidationRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,20}$/
+    const nameValidation = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+    const emailValidation = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordValidation = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,20}$/;
 
-    
+    if (!nameValidation.test(name)) return res.status(400).json({ success: false, message: "Name should contain only alphabets and spaces" });
+    if (!emailValidation.test(email)) return res.status(400).json({ success: false, message: "Email is not valid" });
+    if (!passwordValidation.test(password)) return res.status(400).json({ success: false, message: "Password must have uppercase, lowercase, number, special character, 8-20 chars" });
 
-    if (nameValidationRegex.test(name) == false) {
-        return res.status(400).json({
-            success:false,
-            message:"Name should be only alphabets and spaces",
-        })
-    }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ success: false, message: `User with email ${email} already exists` });
 
-    if(emailValidationRegex.test(email) == false){
-        return res.status(400).json({
-             sucess:false,
-            message:"Email is not valid",
-        })
-    }
-
-    if(passwordValidationRegex.test(password) == false){
-        return res.status(400).json({
-             success:false,
-            message:"Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
-        })
-    }
-
-    const existingUser = await User.findOne({email});
-    if(existingUser){
-        return res.status(400).json({
-            success:false,
-            message:`User with email ${email} already exists`,
-        })
-    }
-
-    const newUser = new User({name,email,password : md5(password)});
-
+    const newUser = new User({ name, email, password: md5(password) });
     const savedUser = await newUser.save();
 
-    res.json({
-        success:true,
-        message:"User registered successfuly",
-        user:savedUser,
-    })
+    res.status(201).json({ success: true, message: "User registered successfully", user: savedUser });
+  } catch (error) {
+    console.error("Signup error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 
-}
+const postLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ success: false, message: "Email and password required" });
 
-const postLogin = async(req,res)=>{
-    const {email , password} = req.body;
+    const existingUser = await User.findOne({ email, password: md5(password) }).select("_id name email");
+    if (!existingUser) return res.status(401).json({ success: false, message: "Invalid email or password" });
 
-    if(!email || !password) {
-        return res.status(400).json({
-            success:false,
-            message:"email and password are required",
-        });
-    }
-
-    const existingUser = await User.findOne({email,password :md5(password)}).
-    select(
-        "_id name email"
+    const token = jwt.sign(
+      { id: existingUser._id, email: existingUser.email, name: existingUser.name },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
     );
 
-    if(existingUser){
+    res.json({ success: true, message: "Logged in successfully", user: existingUser, token });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 
-        const token = jwt.sign
-        ({ id: existingUser._id, email: existingUser.email, name: existingUser.name }, 
-        process.env.JWT_SECRET, { expiresIn: "1d" });
-
-
-        return res.json({
-            success:true,
-            message:"User logged in successfully",
-            user:existingUser,
-            token,
-        });
- 
-    }
-    else{
-        return res.status(401).json({
-            success:false,
-            message:"invalid email or password",
-        });
-    }
-}
-
-export{postSignup,postLogin}
+export { postSignup, postLogin };

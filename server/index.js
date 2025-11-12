@@ -6,12 +6,9 @@ import { postLogin, postSignup } from "./controllers/user.js";
 import { postIdea, getIdea } from "./controllers/Idea.js";
 
 dotenv.config();
-
 const app = express();
 app.use(express.json());
 app.use(cors());
-
-
 
 const connectDB = async () => {
   try {
@@ -23,42 +20,12 @@ const connectDB = async () => {
   }
 };
 
-// app.get("/api/request-count",(req,res)=>{
-//     res.json({requestCount});
-// })
-
-
-// app.use((req,res,next)=>{
-//     requestCount++;
-//     next();
-// })
-
-app.get("/", (req, res) => {
-  res.json({ success: true, message: "server is up...." });
-});
-
-
-// const checkHeaderKey = (req, res, next) => {
-//   const { api_token } = req.headers;
-//   console.log("Checking API Key:", api_token);
-
-//   if (api_token === "admin") {
-//     console.log("API key valid");
-//     next();
-//   } else {
-//     console.log("Key invalid");
-//     return res.status(401).json({ message: "Unauthorized" });
-//   }
-// };
-
-// app.use(checkHeaderKey);
-
-app.post("/signup" , postSignup);
-app.post("/login" , postLogin);
-app.get("/idea",  getIdea);
-app.post("/idea" ,postIdea);
-
-
+// Routes
+app.get("/", (req, res) => res.json({ success: true, message: "Server is up" }));
+app.post("/signup", postSignup);
+app.post("/login", postLogin);
+app.get("/idea", getIdea);
+app.post("/idea", postIdea);
 
 const PORT = process.env.PORT || 8080;
 connectDB().then(() => {

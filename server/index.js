@@ -20,7 +20,7 @@ const connectDB = async () => {
   }
 };
 
-// Routes
+
 app.get("/", (req, res) => res.json({ success: true, message: "Server is up" }));
 app.post("/signup", postSignup);
 app.post("/login", postLogin);

@@ -35,7 +35,7 @@ const ideaSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Pre-save hook to generate slug automatically
+
 ideaSchema.pre("save", function (next) {
   if (!this.slug) {
     const tempSlug = this.title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");

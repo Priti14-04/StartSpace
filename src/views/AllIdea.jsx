@@ -40,31 +40,63 @@ function AllIdea() {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">All Ideas</h1>
-      <p className="text-lg mb-6">{user ? `Hello ${user.name}!` : `Welcome Guest!`}</p>
+    <div className="min-h-screen bg-gray-50 py-10 px-4">
+      <div className="max-w-4xl mx-auto">
+        
+        
+        <div className="mb-10 text-center">
+          <h1 className="text-4xl font-extrabold text-gray-800">
+            💡 All Ideas
+          </h1>
+          <p className="text-gray-600 mt-2 text-lg">
+            {user ? `Hello, ${user.name}! Here are your ideas.` : `Welcome Guest! Explore published ideas below.`}
+          </p>
+        </div>
 
-      {loading ? (
-        <p className="text-center">Loading Ideas...</p>
-      ) : error ? (
-        <p className="text-red-600 text-center">{error}</p>
-      ) : idea.length > 0 ? (
-        idea.map((idea) => (
-          <InvestorIdea
-            key={idea._id}
-            title={idea.title}
-            content={idea.content}
-            author={idea.author}
-            publishedAt={idea.publishedAt}
-            updatedAt={idea.updatedAt}
-            status={idea.status}
-            category={idea.category}
-            slug={idea.slug}
-          />
-        ))
-      ) : (
-        <p className="text-gray-600 text-center">No ideas found. Be the first to submit!</p>
-      )}
+       
+        {loading && (
+          <div className="text-center text-gray-600 text-xl py-10">
+            ⏳ Loading Ideas...
+          </div>
+        )}
+
+        
+        {error && (
+          <div className="text-center text-red-600 text-lg py-4">
+            ❌ {error}
+          </div>
+        )}
+
+      
+        {!loading && !error && idea.length > 0 && (
+          <div className="space-y-6">
+            {idea.map((idea) => (
+              <div
+                key={idea._id}
+                className="bg-white shadow-md p-6 rounded-2xl hover:shadow-lg transition-all border border-gray-200"
+              >
+                <InvestorIdea
+                  title={idea.title}
+                  content={idea.content}
+                  author={idea.author}
+                  publishedAt={idea.publishedAt}
+                  updatedAt={idea.updatedAt}
+                  status={idea.status}
+                  category={idea.category}
+                  slug={idea.slug}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+      
+        {!loading && idea.length === 0 && !error && (
+          <p className="text-center text-gray-600 text-xl py-10">
+            😕 No ideas found. Be the first to submit!
+          </p>
+        )}
+      </div>
     </div>
   );
 }

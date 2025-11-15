@@ -9,7 +9,7 @@ import Login from "./views/Login";
 import Signup from "./views/Signup";
 import InvestorIdea from "./components/InvestorIdea";
 
-// Navbar
+
 const Navbar = () => (
   <nav className="bg-blue-600 text-white p-4 flex justify-between items-center shadow-lg">
     <div className="text-2xl font-bold">StartupCommunity</div>
@@ -23,7 +23,7 @@ const Navbar = () => (
   </nav>
 );
 
-// Footer
+
 const Footer = () => (
   <footer className="bg-gray-900 text-white p-8 text-center mt-8">
     &copy; {new Date().getFullYear()} StartupCommunity. All rights reserved. |
@@ -34,7 +34,7 @@ const Footer = () => (
   </footer>
 );
 
-// Modern Home Page
+
 const Home = () => {
   const [latestIdeas, setLatestIdeas] = useState([]);
 
@@ -52,7 +52,7 @@ const Home = () => {
 
   return (
     <div className="bg-gray-50">
-      {/* Hero Section */}
+      
       <section className="relative bg-blue-600 text-white h-[600px] flex items-center justify-center">
         <img 
           src="https://th.bing.com/th/id/OIP.7UGQCCg8a6kyAkuteUIWHgHaEK?w=327&h=184&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3" 
@@ -69,7 +69,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      
       <section className="py-16 container mx-auto">
         <h2 className="text-3xl font-bold mb-8 text-center">Why Join Us?</h2>
         <div className="grid md:grid-cols-3 gap-8 text-center">
@@ -91,7 +91,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Latest Ideas Section */}
+      
       <section className="py-16 container mx-auto">
         <h2 className="text-3xl font-bold mb-8 text-center">Latest Ideas</h2>
         {latestIdeas.length > 0 ? (
@@ -115,7 +115,7 @@ const Home = () => {
         )}
       </section>
 
-      {/* Investors / Founders Showcase */}
+      
       <section className="py-16 bg-blue-50 text-center">
         <h2 className="text-3xl font-bold mb-8">Meet Our Investors</h2>
         <div className="flex flex-wrap justify-center gap-6">
@@ -133,7 +133,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+     
       <section className="py-16 bg-blue-50 text-center">
         <h2 className="text-3xl font-bold mb-4">Ready to Share Your Idea?</h2>
        
@@ -142,7 +142,7 @@ const Home = () => {
   );
 };
 
-// App Component
+
 function App() {
   return (
     <div className="flex flex-col min-h-screen">

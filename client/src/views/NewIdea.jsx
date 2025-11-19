@@ -1,76 +1,169 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import MarkdownEditor from '@uiw/react-markdown-editor';
+import { toast, Toaster } from 'react-hot-toast';
 
-const NewIdea = () => {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [content, setContent] = useState("");
-  const [message, setMessage] = useState("");
+const IDEA_CATEGORIES = ["Technology", "Travel", "Food", "Lifestyle", "Fashion", "Sports"];
+
+function NewIdea() {
   const navigate = useNavigate();
+  const [content, setContent] = useState('');
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState(IDEA_CATEGORIES[0]);
+  const [status, setStatus] = useState('published');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-color-mode", "light");
+    
+   
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!user) {
+      toast.error("Please login to create a Idea");
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const saveIdea = async () => {
+   
+    if (!title.trim()) {
+      toast.error("Title is required");
+      return;
+    }
+    if (!content.trim()) {
+      toast.error("Content is required");
+      return;
+    }
+    if (!category) {
+      toast.error("Category is required");
+      return;
+    }
+
+    setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      
+      const logged = JSON.parse(localStorage.getItem("loggedInUser"));
+      const token = logged?.token;
+
       if (!token) {
-        setMessage("Please login first!");
+        toast.error("Authentication required. Please login again.");
+        navigate('/login');
+        setLoading(false);
         return;
       }
 
-      const res = await axios.post(
-        "http://localhost:8080/idea",
-        { title, category, content },
-        { headers: { Authorization: `Bearer ${token}` } }
+      console.log("Creating idea with token:", token);
+      console.log("Idea data:", { title, content, category, status });
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/ideas`,
+        {
+          title: title.trim(),
+          content: content.trim(),
+          category,
+          status
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
       );
 
-      if (res.data.success) {
-        setMessage("Idea submitted successfully!");
-        setTimeout(() => navigate("/idea"), 1500); // redirect after 1.5s
+      console.log("Response:", response.data);
+
+      if (response?.data?.success) {
+        toast.success("Idea created successfully!");
+        setTimeout(() => {
+          navigate('/ideas');
+        }, 1500);
+      } else {
+        toast.error(response?.data?.message || "Failed to create idea");
       }
-    } catch (err) {
-      console.error(err);
-      setMessage("Error submitting idea");
+    } catch (error) {
+      console.error("Full error:", error);
+      console.error("Error response:", error.response?.data);
+      
+      if (error.response?.status === 401) {
+        toast.error("Unauthorized. Please login again.");
+        navigate('/login');
+      } else {
+        toast.error(error.response?.data?.message || error.message || "Failed to create blog");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="p-8 max-w-xl mx-auto">
-      <h2 className="text-3xl font-semibold mb-4">Submit New Idea</h2>
-      {message && <p className="mb-4 text-green-600">{message}</p>}
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <textarea
-          placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
+    <div className='container mx-auto p-4'>
+      <h1 className='text-3xl font-bold mb-6'>Create New Idea</h1>
+
+      <input
+        type="text"
+        placeholder='Blog Title'
+        className='border p-3 w-full my-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+
+      <div className='flex gap-4 my-4'>
+        <select 
+          value={category} 
+          onChange={(e) => setCategory(e.target.value)} 
+          className='border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
         >
-          Submit Idea
+          {BLOG_CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+
+        <select 
+          value={status} 
+          onChange={(e) => setStatus(e.target.value)}
+          className='border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400'
+        >
+          <option value="draft">Draft</option>
+          <option value="published">Published</option>
+        </select>
+      </div>
+
+      <MarkdownEditor
+        value={content}
+        height='500px'
+        onChange={(value) => setContent(value)}
+        className='my-4'
+      />
+
+      <div className='flex gap-4 mt-4'>
+        <button 
+          className='bg-green-500 text-white px-6 py-2 rounded cursor-pointer hover:bg-green-600 transition disabled:opacity-50 disabled:cursor-not-allowed font-semibold'
+          type="button"
+          onClick={saveIdea}
+          disabled={loading}
+        >
+          {loading ? 'Creating Idea...' : 'Create Idea'}
         </button>
-      </form>
+
+        <button 
+          className='bg-gray-500 text-white px-6 py-2 rounded cursor-pointer hover:bg-gray-600 transition font-semibold'
+          type="button"
+          onClick={() => navigate('/ideas')}
+          disabled={loading}
+        >
+          Cancel
+        </button>
+      </div>
+
+      <Toaster position="top-right" />
     </div>
   );
-};
+}
 
 export default NewIdea;

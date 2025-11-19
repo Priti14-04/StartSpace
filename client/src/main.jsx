@@ -8,23 +8,24 @@ import EditIdea from './views/EditIdea'
 import Signup from './views/Signup'
 import Login from './views/Login'
 import ReadIdea from './views/ReadIdea'
+import About from './views/About'
+import Contact from './views/Contact'
 import App from './App'
 
 createRoot(document.getElementById('root')).render(
  <BrowserRouter>
  <Routes>
   <Route path="/" element={<App/>}/>
-    <Route path="/idea" element={<AllIdea/>}/>
+    <Route path="/ideas" element={<AllIdea/>}/>
     <Route path="/new" element={<NewIdea/>}/>
     <Route path="/edit/:id" element={<EditIdea/>}/>
     <Route path="/idea/:slug" element={<ReadIdea/>}/>
     <Route path="/login" element={<Login/>}/>
     <Route path="/signup" element={<Signup/>}/>
+    <Route path="/about" element={<About/>}/>
+    <Route path="/contact" element={<Contact/>}/>
 
-    <Route
-    path="*"
-    element={<h1 className='text-center mt-4'>404 Not Found</h1>}/>
-   </Routes> 
+  </Routes>
 
  </BrowserRouter>
 )

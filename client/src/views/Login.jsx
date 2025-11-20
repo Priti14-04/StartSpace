@@ -16,7 +16,7 @@ const Login = () => {
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
         alert("Login successful!");
-        window.location.href = "/idea"; // Redirect to all ideas
+        window.location.href = "/idea";
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -50,6 +50,10 @@ const Login = () => {
         >
           Login
         </button>
+        <p className='mt-4 text-center'>
+           Do not have account? Then Register👇
+            <Link to="/signup" className="text-blue-600 underline">Login</Link>
+          </p>
       </form>
     </div>
   );

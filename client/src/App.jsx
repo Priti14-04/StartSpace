@@ -1,10 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import axios from "axios";
+import Navbar from "./views/Navbar";
 
 
 
-// Footer
+<nav className="bg-white shadow-md fixed top-0 left-0 w-full z-10">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        
+          <Link to="/" className="flex items-center gap-2 group">
+            <img
+              src="https://th.bing.com/th/id/OIP.vynN_VBU6lxi3pR5LOm9IgHaE_?w=274&h=185&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3"
+              alt="Tiny Blog Logo"
+              className="w-10 h-10 group-hover:scale-110 transition-transform duration-300"
+            />
+            <span className="text-2xl font-bold text-orange-600 group-hover:text-orange-700 transition-colors duration-300">
+              Tiny Blog
+            </span>
+          </Link>
+
+         
+          <div className="space-x-6 hidden md:flex">
+            <Link to="/" className="hover:text-orange-600">Home</Link>
+            <Link to="/about" className="hover:text-orange-600">About</Link>
+            <Link to="/login" className="hover:text-orange-600">Login</Link>
+            <Link
+              to="/signup"
+              className="bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 rounded-lg shadow-md"
+            >
+              Signup
+            </Link>
+            <Link to="/contact" className="hover:text-orange-600">Contact</Link>
+          </div>
+        </div>
+      </nav>
 const Footer = () => (
   <footer className="bg-gray-900 text-white p-8 text-center mt-8">
     &copy; {new Date().getFullYear()} StartupCommunity. All rights reserved. |
@@ -21,7 +50,7 @@ const Footer = () => (
   </footer>
 );
 
-// Modern Home Page
+
 const Home = () => {
   const [latestIdeas, setLatestIdeas] = useState([]);
 
@@ -42,7 +71,7 @@ const Home = () => {
 
   return (
     <div className="bg-gray-50">
-      {/* Hero Section */}
+     
       <section className="relative bg-blue-600 text-white h-[600px] flex items-center justify-center">
         <img
           src="https://th.bing.com/th/id/OIP.7UGQCCg8a6kyAkuteUIWHgHaEK?w=327&h=184&c=7&r=0&o=7&dpr=1.4&pid=1.7&rm=3"
@@ -73,7 +102,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+     
       <section className="py-16 container mx-auto">
         <h2 className="text-3xl font-bold mb-8 text-center">Why Join Us?</h2>
 
@@ -118,7 +147,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Latest Ideas Section */}
+    
       <section className="py-16 container mx-auto">
         <h2 className="text-3xl font-bold mb-8 text-center">Latest Ideas</h2>
 
@@ -146,12 +175,12 @@ const Home = () => {
   );
 };
 
-// App Component
+
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Navbar removed */}
-      <div className="flex-grow">
+      
+      <div className="grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/idea" element={<AllIdea />} />

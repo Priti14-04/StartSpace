@@ -4,7 +4,27 @@ import axios from 'axios';
 import MarkdownEditor from '@uiw/react-markdown-editor';
 import { toast, Toaster } from 'react-hot-toast';
 
-const IDEA_CATEGORIES = ["Technology", "Travel", "Food", "Lifestyle", "Fashion", "Sports"];
+const IDEA_CATEGORIES = ["Technology",
+    "Health",
+    "Travel",
+    "Finance",
+    "Education",
+    "Lifestyle",
+    "Food",
+    "Entertainment",
+    "Sports",
+    "science",
+    "Art",
+    "History",
+    "Politics",
+    "Environment",
+    "Business",
+    "Culture",
+    "Fashion",
+    "Photography",
+    "DIY",
+    "Parenting",
+    "Other",];
 
 function NewIdea() {
   const navigate = useNavigate();

@@ -13,7 +13,6 @@ function Signup() {
       setError("All fields are required");
       return;
     }
-    
 
     try {
       setLoading(true);

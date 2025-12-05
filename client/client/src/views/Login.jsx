@@ -48,7 +48,7 @@ const Login = () => {
           type="submit"
           className="bg-blue-600 text-white p-2 rounded cursor-pointer hover:bg-blue-700 transition"
         >
-          Login
+          Login🫂
         </button>
         <p className='mt-4 text-center'>
            Do not have account? Then Register👇

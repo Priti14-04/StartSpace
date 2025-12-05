@@ -2,13 +2,12 @@
 
 StartSpace is a modern web platform designed to bring **founders, investors, and innovators** together in one place. Users can share ideas, pitch startup concepts, browse opportunities, and collaborate with like-minded people.
 
+---
 
-<<<<<<< HEAD
 ## 🌐 Live Demo
 (If deployed, add link here)
-=======
->>>>>>> 5e24e8ff6a584f81c7aeb66eea75fba4694fd013
 
+---
 
 ## 📌 Features
 

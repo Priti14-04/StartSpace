@@ -25,7 +25,6 @@ const Login = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div
       className="min-h-screen flex justify-center items-center bg-cover bg-center relative"
       style={{
@@ -73,38 +72,6 @@ const Login = () => {
           </a>
         </p>
       </div>
-=======
-    <div className="p-8 max-w-md mx-auto">
-      <h2 className="text-3xl font-semibold mb-4 text-center">Login</h2>
-      <form onSubmit={handleLogin} className="flex flex-col space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="border p-2 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="border p-2 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
-        >
-          Login
-        </button>
-        <p className='mt-4 text-center'>
-           Do not have account? Then Register👇
-            <Link to="/signup" className="text-blue-600 underline">Login</Link>
-          </p>
-      </form>
->>>>>>> 5e24e8ff6a584f81c7aeb66eea75fba4694fd013
     </div>
   );
 };

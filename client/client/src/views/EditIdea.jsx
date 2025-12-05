@@ -37,7 +37,7 @@ function EditIdea() {
       setCategory(idea.category);
       setStatus(idea.status);
     } catch (error) {
-    
+    // Show more specific error messages
     if (error.response?.status === 404) {
       toast.error("idea not found");
     } else if (error.response?.data?.message) {

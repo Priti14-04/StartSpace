@@ -1,0 +1,25 @@
+const IDEA_CATEGORIES = [
+    "Technology",
+    "Health",
+    "Travel",
+    "Finance",
+    "Education",
+    "Lifestyle",
+    "Food",
+    "Entertainment",
+    "Sports",
+    "science",
+    "Art",
+    "History",
+    "Politics",
+    "Environment",
+    "Business",
+    "Culture",
+    "Fashion",
+    "Photography",
+    "DIY",
+    "Parenting",
+    "Other",
+]
+
+export {IDEA_CATEGORIES}

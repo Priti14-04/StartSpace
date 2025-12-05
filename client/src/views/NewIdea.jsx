@@ -7,10 +7,12 @@ const NewIdea = () => {
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -26,7 +28,7 @@ const NewIdea = () => {
 
       if (res.data.success) {
         setMessage("Idea submitted successfully!");
-        setTimeout(() => navigate("/idea"), 1500); // redirect after 1.5s
+        setTimeout(() => navigate("/idea"), 1500);
       }
     } catch (err) {
       console.error(err);
@@ -35,40 +37,59 @@ const NewIdea = () => {
   };
 
   return (
-    <div className="p-8 max-w-xl mx-auto">
-      <h2 className="text-3xl font-semibold mb-4">Submit New Idea</h2>
-      {message && <p className="mb-4 text-green-600">{message}</p>}
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <textarea
-          placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition"
-        >
-          Submit Idea
-        </button>
-      </form>
+    <div
+      className="min-h-screen flex justify-center items-center bg-cover bg-center p-6"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1500&q=80')",
+      }}
+    >
+      <div className="w-full max-w-2xl bg-white/20 backdrop-blur-lg shadow-2xl rounded-2xl p-10 border border-white/30">
+        <h2 className="text-4xl font-bold text-center text-white mb-8 drop-shadow">
+          💡 Submit a New Idea
+        </h2>
+
+        {message && (
+          <p className="text-center text-yellow-200 mb-4 font-semibold">
+            {message}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-5">
+          <input
+            type="text"
+            placeholder="Enter Idea Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="px-4 py-3 rounded-xl bg-white/80 shadow-md focus:bg-white outline-none"
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="Enter Category (e.g., Startup, Tech, Health)"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="px-4 py-3 rounded-xl bg-white/80 shadow-md focus:bg-white outline-none"
+            required
+          />
+
+          <textarea
+            placeholder="Write your idea in detail..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="px-4 py-3 rounded-xl bg-white/80 shadow-md focus:bg-white outline-none min-h-[150px]"
+            required
+          />
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-600 text-white rounded-xl text-lg font-semibold shadow-lg hover:bg-blue-700 transition"
+          >
+            🚀 Submit Idea
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
